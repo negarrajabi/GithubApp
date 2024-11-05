@@ -16,7 +16,7 @@ jobs:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64  # Change JAVA_HOME to JDK 17 path
       ANDROID_SDK_ROOT: $HOME/android-sdk
       ANDROID_HOME: $HOME/android-sdk
-      PATH: $HOME/android-sdk/platform-tools:$HOME/android-sdk/tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
+      PATH: $HOME/android-sdk/platform-tools:$HOME/android-sdk/tools:$HOME/android-sdk/cmdline-tools/latest/bin:/usr/bin:$PATH
 
     steps:
       - name: Checkout code
@@ -27,6 +27,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'  # Change from 11 to 17
+
+      - name: Install tar
+        run: sudo apt-get update && sudo apt-get install -y tar
 
       - name: Cache Gradle packages
         uses: actions/cache@v3
@@ -39,21 +42,32 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
         with:
-          api-level: 34  # Ensure this matches your target SDK
-          build-tools: 34.0.0  # Update this to the appropriate build tools version
+          api-level: 34
+          build-tools: 34.0.0
+          cmake: 3.10.2.4988404
           components: "platform-tools,platforms;android-34,build-tools;34.0.0"
+          verbose: true  # For detailed logs
+
+      - name: Verify SDK Manager
+        run: |
+          echo "Listing SDK directory:"
+          ls -R $ANDROID_SDK_ROOT
+          echo "Running sdkmanager to check installation:"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list
 
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x ./gradlew
 
-      - name: List Android SDK Directory
-        run: ls -R $HOME/android-sdk
+      - name: Start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          apiLevel: 34
+          script: ./gradlew connectedAndroidTest
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
-
