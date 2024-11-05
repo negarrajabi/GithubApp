@@ -13,10 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64  # Change JAVA_HOME to JDK 17 path
-      ANDROID_SDK_ROOT: $HOME/android-sdk
-      ANDROID_HOME: $HOME/android-sdk
-      PATH: $HOME/android-sdk/platform-tools:$HOME/android-sdk/tools:$HOME/android-sdk/cmdline-tools/latest/bin:/usr/bin:$PATH
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk
+      ANDROID_SDK_ROOT: /opt/android-sdk
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
     steps:
       - name: Checkout code
