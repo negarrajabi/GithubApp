@@ -44,10 +44,10 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
-          api-level: 35
-          build-tools: 35.0.0
+          api-level: 34
+          build-tools: 34.0.0
           cmake: 3.10.2.4988404
-          components: "platform-tools,platforms;android-35,build-tools;35.0.0"
+          components: "platform-tools,platforms;android-34,build-tools;34.0.0"
           verbose: true  # For detailed logs
 
       - name: Verify SDK Manager
@@ -63,7 +63,7 @@ jobs:
       - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          apiLevel: 35
+          apiLevel: 34
           script: ./gradlew connectedAndroidTest
 
       - name: Build with Gradle
