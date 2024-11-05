@@ -42,7 +42,7 @@ jobs:
         uses: android-actions/setup-android@v2
         with:
           api-level: 35
-          build-tools: 35.0.0  # Replace with the latest version available
+          build-tools: 35.0.0
           cmake: 3.10.2.4988404
           components: "platform-tools,platforms;android-35,build-tools;35.0.0"
 
@@ -52,11 +52,14 @@ jobs:
       - name: List Android SDK Directory
         run: ls -R $HOME/android-sdk
 
+      - name: Start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          apiLevel: 35
+          script: ./gradlew connectedAndroidTest
+
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
-
-      - name: Start Android Emulator
-        uses: reactivecircus/a
