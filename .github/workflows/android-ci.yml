@@ -17,7 +17,7 @@ jobs:
     env:
       # Customize the JDK version and Android SDK API level here
       JAVA_HOME_11_X64: /usr/lib/jvm/java-11-openjdk-amd64
-      ANDROID_SDK_ROOT: /usr/local/android-sdk
+      ANDROID_SDK_ROOT: $HOME/android-sdk
 
     steps:
       # Checkout the code from the repository
