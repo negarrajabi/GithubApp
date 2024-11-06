@@ -50,6 +50,13 @@ jobs:
           components: "platform-tools,platforms;android-35,build-tools;35.0.0"
           verbose: true  # For detailed logs
 
+      - name: Start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+            api-level: 34  # Use the correct input key 'api-level'
+            avd-name: Pixel_4_API_34  # Example AVD name, make sure it matches your AVD config
+            disable-animations: true  # Optional, speeds up emulator boot time
+
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x ./gradlew
 
@@ -61,3 +68,6 @@ jobs:
 
       - name: Lint code
         run: ./gradlew lint
+
+      - name: Run Espresso tests
+        run: ./gradlew connectedDebugAndroidTest
